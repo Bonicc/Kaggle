@@ -39,12 +39,13 @@ class QAgent:
         self.future_head_reward = -9
         self.tail_reward = 10
         
+        self.alpha = 0.3
+        self.gamma = 0.99
+        
     def __call__(self, observation: Observation):       
         
         cols, rows = self.configuration.columns, self.configuration.rows
                 
-        alpha = 0.3
-        gamma = 0.99
         
         player_index = observation.index    
         
@@ -115,7 +116,7 @@ class QAgent:
         
         #############################################################################    
         init_eps = 0.9
-        for i in range(1000): # episodes
+        for i in range(1000): # episodes                    
             eps = init_eps/(i+1)
 
             pp = row_col(player_head, cols)
@@ -123,7 +124,7 @@ class QAgent:
             last_action = self.last_action
             
             for j in range(observation.step, 200): # maximum time in a episode
-                                
+                
                 sa = self.action_select(eps, q_table, pp, last_action)
                 
                 pnp = list(map(lambda x,y: x+y, pp, sa.to_row_col()))
@@ -133,24 +134,23 @@ class QAgent:
                 
                 if map_status[pnp[0]][pnp[1]] == self.body_reward or\
                     map_status[pnp[0]][pnp[1]] == self.food_reward:
-                    
                     q_table[pp[0]][pp[1]][sa] = \
-                        (1-alpha) * q_table[pp[0]][pp[1]][sa] + \
-                        alpha*(map_status[pnp[0]][pnp[1]])
+                        (1-self.alpha) * q_table[pp[0]][pp[1]][sa] + \
+                        self.alpha*(map_status[pnp[0]][pnp[1]])
                     break
 
                 else:             
                     q_table[pp[0]][pp[1]][sa] = \
-                        (1-alpha) * q_table[pp[0]][pp[1]][sa] + \
-                        alpha*(map_status[pnp[0]][pnp[1]]+ \
-                        gamma*max(q_table[pnp[0]][pnp[1]].values()))
+                        (1-self.alpha) * q_table[pp[0]][pp[1]][sa] + \
+                        self.alpha*(map_status[pnp[0]][pnp[1]]+ \
+                        self.gamma*max(q_table[pnp[0]][pnp[1]].values()))
 
                     pp = pnp
                 
                 last_action = sa
-                
+                                    
         self.last_action = self.action_select(0, q_table, row_col(player_head, cols), self.last_action)
-        
+                        
         return self.last_action.name
         
         
@@ -160,7 +160,7 @@ class QAgent:
         
         if last_action != None:
             del temp_dict[last_action.opposite()]
-                
+        
         return max(temp_dict.keys(), key = lambda k: temp_dict[k]) \
                             if eps < np.random.random_sample() else choice(list(temp_dict.keys()))
         

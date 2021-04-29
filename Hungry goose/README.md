@@ -1,7 +1,17 @@
 # [Hungry Geese](https://www.kaggle.com/c/hungry-geese/overview)
 
-## 우리가 일반적으로 했었던 그 스네이크 게임입니다. 단, 혼자하는게 아닌 다른 플레이어 3명과 함께 그리고 먹이가 단 2개만 제공됩니다.
-## The snake game we played before, but not alone, with other 3 players and there is only 2 foods in map
+[환경](https://github.com/Kaggle/kaggle-environments/blob/master/kaggle_environments/envs/hungry_geese/hungry_geese.py)
+[Environment](https://github.com/Kaggle/kaggle-environments/blob/master/kaggle_environments/envs/hungry_geese/hungry_geese.py)
+
+우리가 일반적으로 했었던 그 스네이크 게임입니다. 단, 혼자하는게 아닌 다른 플레이어 3명과 함께 그리고 먹이가 단 2개만 제공됩니다.
+The snake game we played before, but not alone, with other 3 players and there is only 2 foods in map
+
+### greedy agent
+- 그리디 정책으로 먹이를 찾는다.
+-- 
+
+- find the food with greedy policy
+
 
 ### q_agent
 
@@ -18,5 +28,10 @@
 - The cells that have some of probability which other snakes move to is set reward as -9
 
 ### Result with greedy Agent
-- White one is q_agent
+- White one is q_agent, blue one is greedy agent
+
 ![result of q learning agent](./q_agent_result/result.apng)
+
+- White one is q_agent, other is greedy agent
+
+![result of q learning agent](./q_agent_result/result2.apng)
